@@ -2,7 +2,8 @@
 from datetime import datetime
 from insurance import conn, login_manager
 from flask_login import UserMixin
-from psycopg2 import sql
+from psycopg2 import sql, extras
+from insurance.models import PolicyTemplate
 
 
 
@@ -76,6 +77,66 @@ def update_claim_status(claim_id, status):
         raise e
     finally:
         cur.close()
+
+def get_all_policies():
+    cur = conn.cursor(cursor_factory=extras.DictCursor)
+    sql = "SELECT * FROM policies"
+    cur.execute(sql)
+    policies = cur.fetchall()
+    cur.close()
+    return policies
+
+def get_policy_by_id(policy_id):
+    cur = conn.cursor(cursor_factory=extras.DictCursor)
+    sql = "SELECT * FROM policies WHERE policy_id = %s"
+    cur.execute(sql, (policy_id, ))
+    policy = cur.fetchone()
+    cur.close()
+    return policy
+
+
+def add_policy(policy_type, start_date, end_date, premium, cover_amount, excess):
+    cur = conn.cursor()
+    sql = """
+    INSERT INTO policies (policy_type, start_date, end_date, premium, cover_amount, excess)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    """
+    cur.execute(sql, (policy_type, start_date, end_date, premium, cover_amount, excess))
+    conn.commit()
+    cur.close()
+
+def update_policy(policy_id, start_date, end_date, premium, cover_amount, excess):
+    cur = conn.cursor()
+    try:
+        sql = """
+        UPDATE policies
+        SET policy_type = %s, start_date = %s, end_date = %s, premium = %s, cover_amount = %s, excess = %s
+        WHERE policy_id = %s
+        """
+        cur.execute(sql, (start_date, end_date, premium, cover_amount, excess, policy_id))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        cur.close()
+
+def delete_policy(policy_id):
+    cur = conn.cursor()
+    try:
+        # Check for dependencies in customer_policies and claims
+        cur.execute("DELETE FROM customer_policies WHERE policy_id = %s", (policy_id,))
+        cur.execute("DELETE FROM claims WHERE policy_id = %s", (policy_id,))
+        
+        # Now delete the policy
+        cur.execute("DELETE FROM policies WHERE policy_id = %s", (policy_id,))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()  # Rollback the transaction if any exception occurs
+        raise e  # Re-raise the exception to be handled by the calling function
+    finally:
+        cur.close()
+
 
 
 

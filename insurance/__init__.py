@@ -28,9 +28,9 @@ login_manager.login_message_category = 'info'
 
 roles = ["none","employee","customer"]
 print(roles)
-mysession = {"state" : "initializing","role" : "none", "id": 0}
+# mysession = {"state" : "initializing","role" : "none", "id": 0}
 # mysession = {"state" : "initializing","role" : "customer", "id": 5005}
-# mysession = {"state" : "initializing","role" : "employee", "id": 5002 ,"age" : 202212}
+mysession = {"state" : "initializing","role" : "employee", "id": 6003 ,"age" : 202212}
 print(mysession)
 
 from insurance.Login.routes import Login

@@ -4,16 +4,13 @@
 --
 \echo Emptying the bank database. Deleting all tuples.
 
-DELETE FROM customers;
-DELETE FROM employees;
-DELETE FROM manages;
-DELETE FROM policies;
-DELETE FROM customer_policies;
-DELETE FROM claims;
-DELETE FROM payments;
-DELETE FROM policy_payments;
-DELETE FROM claim_payments;
-
+DELETE FROM customers
+DELETE FROM employees
+DELETE FROM manages
+DELETE FROM policies
+DELETE FROM policy_templates
+DELETE FROM customer_policies
+DELETE FROM claims
 
 \echo .
 \echo

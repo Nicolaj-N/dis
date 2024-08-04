@@ -13,9 +13,9 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
   {% if title %}
-  <title>UIS Prototype - {{ title }}</title>
+  <title>Insurance App - {{ title }}</title>
   {% else %}
-  <title>UIS Prototype</title>
+  <title>Insurance App</title>
   {% endif %}
 </head>
 
@@ -105,6 +105,10 @@
             <li class="list-group-item list-group-item-light">Claims</li>
             <li class="list-group-item list-group-item-light">
               <a class="nav-item nav-link" href="{{ url_for('Employee.review_claims') }}">Review Claims</a>
+            </li>
+            <li class="list-group-item list-group-item-light">Policies</li>
+            <li class="list-group-item list-group-item-light">
+              <a class="nav-item nav-link" href="{{ url_for('Employee.manage_policies') }}">Manage Policies</a>
             </li>
             {% endif %}
           </ul>
