@@ -1,4 +1,4 @@
-# Unfinished Bank Project: UIS_Prototype
+# Insurance Policy Project
 ## usage
 The database is a website running Python and Flask library. It has evolved as an unfinished project with development flaws and serves as a starting point for adopting flask as a means of making your own prototype.
 The schema of the database is an insurance where customers can add policies and make claims.
