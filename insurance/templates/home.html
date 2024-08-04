@@ -1,0 +1,28 @@
+{% if "none" == role %}
+
+<html>
+
+<head>
+    <title>Preface</title>
+</head>
+<center>
+    <h1>
+
+        <body> Only way to add additional policies to the database currently is through schema_ins.sql or using psql
+    </h1>
+
+
+
+
+</center>
+</body>
+
+</html>
+
+{% endif %}
+{% if "customer" == role %}
+{% set page = 'home' %}
+{% include "policies.html" %}
+{% else %}
+{% include "layout.html" %}
+{% endif %}

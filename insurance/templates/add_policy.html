@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Add an Insurance Policy</h1>
+
+    <form action="{{ url_for('Customer.add_policy') }}" method="post">
+        {{ form.hidden_tag() }}
+        {% for subfield in form.policy %}
+        <div class="form-check">
+            {{ subfield(class="form-check-input") }}
+            {{ subfield.label(class="form-check-label") }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Add Policy</button>
+    </form>
+{% endblock %}

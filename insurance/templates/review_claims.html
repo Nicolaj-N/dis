@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Review Customer Claims</h1>
+
+<div class="table-responsive">
+    {% if pending_claims %}
+    <h2>Pending Claims</h2>
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Claim ID</th>
+                <th scope="col">Policy ID</th>
+                <th scope="col">Customer CPR Number</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Claim Date</th>
+                <th scope="col">Claim Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for claim in pending_claims %}
+            <tr>
+                <td>{{ claim[0] }}</td>
+                <td>{{ claim[1] }}</td>
+                <td>{{ claim[2] }}</td>
+                <td>{{ claim[3] }}</td>
+                <td>{{ claim[4] }}</td>
+                <td>{{ claim[5] }}</td>
+                <td>{{ claim[6] }}</td>
+                <td>{{ claim[7] }}</td>
+                <td>
+                    <form action="{{ url_for('Employee.update_claim_status_route', claim_id=claim[0]) }}" method="post"
+                        style="display:inline;">
+                        <button type="submit" name="action" value="approve"
+                            class="btn btn-success btn-sm">Approve</button>
+                        <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No pending claims found.</p>
+    {% endif %}
+</div>
+
+<h2>Resolved Claims</h2>
+<div class="table-responsive">
+    {% if resolved_claims %}
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Claim ID</th>
+                <th scope="col">Policy ID</th>
+                <th scope="col">Customer CPR Number</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Claim Date</th>
+                <th scope="col">Claim Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for claim in resolved_claims %}
+            <tr>
+                <td>{{ claim[0] }}</td>
+                <td>{{ claim[1] }}</td>
+                <td>{{ claim[2] }}</td>
+                <td>{{ claim[3] }}</td>
+                <td>{{ claim[4] }}</td>
+                <td>{{ claim[5] }}</td>
+                <td>{{ claim[6] }}</td>
+                <td>{{ claim[7] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No resolved claims found.</p>
+    {% endif %}
+</div>
+{% endblock %}

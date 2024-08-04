@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>{{ current_user.name }}</h1>
+
+<div class="content-section">
+  <table class="table">
+    <thead>
+      <tr>
+        <th colspan="2">Personal Details</th>
+      </tr>
+    </thead>
+    {% if current_user.role == "customer" %}
+    <tbody>
+      <tr>
+        <th scope="row">Name</th>
+        <td>{{ current_user.name }}</td>
+      </tr>
+      <tr>
+        <th scope="row">CPR Number</th>
+        <td>{{ current_user.CPR_number }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Address</th>
+        <td>{{ current_user.address }}</td>
+      </tr>
+    </tbody>
+    {% elif current_user.role == "employee" %}
+    <tbody>
+      <tr>
+        <th scope="row">Name</th>
+        <td>{{ current_user.name }}</td>
+      </tr>
+      <tr>
+        <th scope="row">CPR Number</th>
+        <td>{{ current_user.id }}</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

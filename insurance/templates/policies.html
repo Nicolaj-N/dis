@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block content %}
+{% if page == 'home' %}
+<h1>Welcome {{ current_user.name }}</h1>
+<hr />
+{% endif %}
+
+<h2>{% if active %}Active{% else %}Expired{% endif %} Policies</h2>
+
+<input type="text" id="search" placeholder="Search..." />
+
+{% if policies %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Policy ID</th>
+            <th scope="col">Policy Type</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Premium</th>
+            {% if active %}
+            <th scope="col">Claim</th>
+            <th scope="col">Remove</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody id="policy-body">
+        {% for policy in policies %}
+        <tr class="policy" policy-type="{{ policy[1] }}">
+            <td>{{ policy[0] }}</td>
+            <td>{{ policy[1] }}</td>
+            <td>{{ policy[2] }}</td>
+            <td>{{ policy[3] }}</td>
+            <td>{{ policy[4] }}</td>
+            {% if active %}
+            <td>
+                <form action="{{ url_for('Customer.make_claim', policy_id=policy[0]) }}" method="post"
+                    style="display:inline;">
+                    <button type="submit" class="btn btn-success">Make a Claim</button>
+                </form>
+            </td>
+            <td>
+                <form action="{{ url_for('Customer.remove_policy', policy_id=policy[0]) }}" method="post"
+                    style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script type="text/javascript">
+    const filterPolicies = (policies, query) => {
+        const pattern = new RegExp(`^${query}`, "i");
+        const filtered = policies.map(policy => policy.cloneNode(true)).filter(
+            (policy) => pattern.test(policy.getAttribute("policy-type"))
+        );
+
+        const policyBody = document.getElementById("policy-body");
+        while (policyBody.firstChild) {
+            policyBody.removeChild(policyBody.firstChild);
+        }
+        filtered.forEach(child => {
+            policyBody.appendChild(child);
+        });
+    };
+    window.onload = () => {
+        const policies = Array.from(document.getElementsByClassName("policy"), policy => policy.cloneNode(true));;
+        const searchBox = document.getElementById("search");
+
+        filterPolicies(policies, searchBox.value);
+
+        searchBox.addEventListener("input", (e) => {
+            filterPolicies(policies, e.target.value);
+        });
+    };
+</script>
+{% else %}
+<p>No {% if active %}active{% else %}previous{% endif %} policies found for this customer.</p>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% if page == 'home' %}
+<h1>Welcome {{ current_user.name }}</h1>
+<hr />
+{% endif %}
+
+<h2>{% if active %}Active{% else %}Resolved{% endif %} Claims</h2>
+
+<!-- c.claim_id, 
+        c.policy_id, 
+        c.claim_date, 
+        c.claim_amount, 
+        c.status,
+        c.description -->
+
+{% if claims %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Claim ID</th>
+            <th scope="col">Policy ID</th>
+            <th scope="col">Claim Date</th>
+            <th scope="col">Claim Amount</th>
+            <th scope="col">Claim Status</th>
+            <th scope="col">Claim Description</th>
+            {% if active %}
+            <th scope="col">Action</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for claim in claims %}
+        <tr>
+            <td>{{ claim[0] }}</td>
+            <td>{{ claim[1] }}</td>
+            <td>{{ claim[2] }}</td>
+            <td>{{ claim[3] }}</td>
+            <td>{{ claim[4] }}</td>
+            <td>{{ claim[5] }}</td>
+            {% if active %}
+            <td>
+                <form action="{{ url_for('Customer.close_claim', claim_id=claim[0]) }}" method="post"
+                    style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Close</button>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No {% if active %}active{% else %}previous{% endif %} claims found for this customer.</p>
+{% endif %}
+{% endblock %}
